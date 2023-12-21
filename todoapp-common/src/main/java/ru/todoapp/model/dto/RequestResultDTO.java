@@ -1,4 +1,7 @@
 package ru.todoapp.model.dto;
 
-public record RequestResultDTO(String requestUUID, String message) {
+import lombok.Builder;
+
+@Builder
+public record RequestResultDTO(String requestUUID, RequestStatus status, String message) {
 }
