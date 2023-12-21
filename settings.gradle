@@ -1,0 +1,5 @@
+rootProject.name = 'todoapp'
+include "todoapp-main"
+include 'todoapp-common'
+include 'todoapp-emulator'
+
