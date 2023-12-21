@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.todoapp.model.RequestEntity;
 import ru.todoapp.model.dto.PingRequestDTO;
 import ru.todoapp.model.dto.RequestResultDTO;
+import ru.todoapp.model.dto.RequestStatus;
 import ru.todoapp.repository.RequestRepository;
 import ru.todoapp.utils.KafkaTopics;
 
@@ -25,7 +26,11 @@ public class PingService {
      */
     public void handle(PingRequestDTO request) {
         requestRepository.save(RequestEntity.of(request));
-        var result = new RequestResultDTO(request.getRequestUUID(), "Received at " + LocalDateTime.now());
+        var result = RequestResultDTO.builder()
+                .requestUUID(request.getRequestUUID())
+                .status(RequestStatus.SUCCESS)
+                .message("Received at " + LocalDateTime.now())
+                .build();
         requestResultDTOKafkaTemplate.send(KafkaTopics.REQUEST_RESULT_TOPIC, result);
     }
 }
