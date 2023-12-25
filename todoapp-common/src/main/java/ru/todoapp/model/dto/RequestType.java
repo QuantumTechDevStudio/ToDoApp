@@ -7,5 +7,10 @@ public enum RequestType {
     /**
      * Тестовый запрос - Ping
      */
-    PING
+    PING,
+
+    /**
+     * Запрос на регистрацию
+     */
+    REGISTER
 }
