@@ -12,6 +12,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import ru.todoapp.model.dto.PingRequestDTO;
 import ru.todoapp.model.dto.RequestResultDTO;
+import ru.todoapp.model.dto.UserRequestDTO;
 import ru.todoapp.utils.KafkaConstants;
 import ru.todoapp.utils.KafkaTopics;
 import ru.todoapp.utils.KafkaUtils;
@@ -65,6 +66,16 @@ public class KafkaConfig {
     }
 
     /**
+     * Создание топика в Kafka для отправки результата запроса
+     *
+     * @see UserRequestDTO
+     */
+    @Bean
+    public NewTopic userRegistrationTopic() {
+        return new NewTopic(KafkaTopics.REGISTRATION_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
+    }
+
+    /**
      * Бин фабрики продюсеров для отправки PingRequest
      */
     @Bean
@@ -92,10 +103,26 @@ public class KafkaConfig {
      * Фабрика listener для получения RequestResultDTO
      */
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, RequestResultDTO> requestResultContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, RequestResultDTO> requestRequestDTOContainerFactory() {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, RequestResultDTO>();
         factory.setConsumerFactory(requstResultConsumerFactory());
 
         return factory;
+    }
+
+    /**
+     * Бин фабрики продюсеров для отправки UserRequestDTO
+     */
+    @Bean
+    public ProducerFactory<String, UserRequestDTO> requestUserRequestProducerFactory() {
+        return KafkaUtils.getKafkaProducerFactory(kafkaUrl);
+    }
+
+    /**
+     * Бин KafkaTemplate для отправки UserRequestDTO
+     */
+    @Bean
+    public KafkaTemplate<String, UserRequestDTO> requestUserResultDTOKafkaTemplate() {
+        return new KafkaTemplate<>(requestUserRequestProducerFactory());
     }
 }

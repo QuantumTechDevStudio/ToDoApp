@@ -14,4 +14,11 @@ public class KafkaTopics {
      * @see ru.todoapp.model.dto.RequestResultDTO
      */
     public static final String REQUEST_RESULT_TOPIC = "todoapp.request.result.topic";
+
+    /**
+     * Топик в кафке для отправки UserRequestDTO
+     *
+     * @see ru.todoapp.model.dto.UserRequestDTO
+     */
+    public static final String REGISTRATION_TOPIC = "todoapp.user.registration.topic";
 }

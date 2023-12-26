@@ -2,6 +2,7 @@ package ru.todoapp.model;
 
 import ru.todoapp.model.dto.PingRequestDTO;
 import ru.todoapp.model.dto.RequestType;
+import ru.todoapp.model.dto.UserRequestDTO;
 
 import java.time.Instant;
 
@@ -14,6 +15,10 @@ import java.time.Instant;
  */
 public record RequestEntity(String requestUUID, RequestType requestType, Instant requestTimestamp) {
     public static RequestEntity of(PingRequestDTO request) {
+        return new RequestEntity(request.getRequestUUID(), request.getType(), Instant.now());
+    }
+
+    public static RequestEntity of(UserRequestDTO request) {
         return new RequestEntity(request.getRequestUUID(), request.getType(), Instant.now());
     }
 }
