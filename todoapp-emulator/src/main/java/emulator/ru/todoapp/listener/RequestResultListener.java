@@ -18,7 +18,7 @@ public class RequestResultListener {
      */
     @KafkaListener(topics = KafkaTopics.REQUEST_RESULT_TOPIC,
             groupId = KafkaConfig.GROUP_ID,
-            containerFactory = "requestRequestDTOContainerFactory")
+            containerFactory = "requestResultContainerFactory")
     public void handleRequestResultMessage(RequestResultDTO requestResultDTO) {
         log.info("Received request result: {}", requestResultDTO);
     }

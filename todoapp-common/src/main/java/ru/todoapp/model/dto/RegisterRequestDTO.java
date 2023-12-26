@@ -8,10 +8,16 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class UserRequestDTO extends RequestDTO {
+public class RegisterRequestDTO extends RequestDTO {
+    /**
+     * имя
+     */
     private String name;
+    /**
+     * фамилия
+     */
     private String surname;
-    public UserRequestDTO(String requestUUID, String userUUID, String name, String surname) {
+    public RegisterRequestDTO(String requestUUID, String userUUID, String name, String surname) {
         super(requestUUID, userUUID, RequestType.REGISTER);
         this.name = name;
         this.surname = surname;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.todoapp.model.dto.PingRequestDTO;
-import ru.todoapp.model.dto.UserRequestDTO;
+import ru.todoapp.model.dto.RegisterRequestDTO;
 import ru.todoapp.utils.KafkaTopics;
 
 import java.util.UUID;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class EmulatorController {
     private final KafkaTemplate<String, PingRequestDTO> pingRequestKafkaTemplate;
 
-    private final KafkaTemplate<String, UserRequestDTO> registrationRequestKafkaTemplate;
+    private final KafkaTemplate<String, RegisterRequestDTO> registrationRequestKafkaTemplate;
 
     /**
      * Обработка запроса Ping.
@@ -41,10 +41,18 @@ public class EmulatorController {
      */
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequestEmulatorDTO registerRequestEmulatorDTO) {
-        var request = new UserRequestDTO(UUID.randomUUID().toString(),
-                registerRequestEmulatorDTO.userUUID(),
-                registerRequestEmulatorDTO.name(),
-                registerRequestEmulatorDTO.surname());
+        RegisterRequestDTO request;
+        if (registerRequestEmulatorDTO.userUUID() == null) {
+            request = new RegisterRequestDTO(UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    registerRequestEmulatorDTO.name(),
+                    registerRequestEmulatorDTO.surname());
+        } else {
+            request = new RegisterRequestDTO(UUID.randomUUID().toString(),
+                    registerRequestEmulatorDTO.userUUID(),
+                    registerRequestEmulatorDTO.name(),
+                    registerRequestEmulatorDTO.surname());
+        }
         registrationRequestKafkaTemplate.send(KafkaTopics.REGISTRATION_TOPIC, request);
     }
 }

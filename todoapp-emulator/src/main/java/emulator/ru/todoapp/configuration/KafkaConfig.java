@@ -12,7 +12,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import ru.todoapp.model.dto.PingRequestDTO;
 import ru.todoapp.model.dto.RequestResultDTO;
-import ru.todoapp.model.dto.UserRequestDTO;
+import ru.todoapp.model.dto.RegisterRequestDTO;
 import ru.todoapp.utils.KafkaConstants;
 import ru.todoapp.utils.KafkaTopics;
 import ru.todoapp.utils.KafkaUtils;
@@ -66,9 +66,9 @@ public class KafkaConfig {
     }
 
     /**
-     * Создание топика в Kafka для отправки результата запроса
+     * Создание топика в Kafka для регистрации
      *
-     * @see UserRequestDTO
+     * @see RegisterRequestDTO
      */
     @Bean
     public NewTopic userRegistrationTopic() {
@@ -103,7 +103,7 @@ public class KafkaConfig {
      * Фабрика listener для получения RequestResultDTO
      */
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, RequestResultDTO> requestRequestDTOContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, RequestResultDTO> requestResultContainerFactory() {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, RequestResultDTO>();
         factory.setConsumerFactory(requstResultConsumerFactory());
 
@@ -111,18 +111,18 @@ public class KafkaConfig {
     }
 
     /**
-     * Бин фабрики продюсеров для отправки UserRequestDTO
+     * Бин фабрики продюсеров для отправки RegisterRequestDTO
      */
     @Bean
-    public ProducerFactory<String, UserRequestDTO> requestUserRequestProducerFactory() {
+    public ProducerFactory<String, RegisterRequestDTO> requestUserRequestProducerFactory() {
         return KafkaUtils.getKafkaProducerFactory(kafkaUrl);
     }
 
     /**
-     * Бин KafkaTemplate для отправки UserRequestDTO
+     * Бин KafkaTemplate для отправки RegisterRequestDTO
      */
     @Bean
-    public KafkaTemplate<String, UserRequestDTO> requestUserResultDTOKafkaTemplate() {
+    public KafkaTemplate<String, RegisterRequestDTO> requestUserResultDTOKafkaTemplate() {
         return new KafkaTemplate<>(requestUserRequestProducerFactory());
     }
 }

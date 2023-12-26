@@ -1,5 +1,7 @@
 package ru.todoapp.utils;
 
+import ru.todoapp.model.dto.RegisterRequestDTO;
+
 public class KafkaTopics {
     /**
      * Топик в кафке для отправки PingRequestDTO
@@ -18,7 +20,7 @@ public class KafkaTopics {
     /**
      * Топик в кафке для отправки UserRequestDTO
      *
-     * @see ru.todoapp.model.dto.UserRequestDTO
+     * @see RegisterRequestDTO
      */
     public static final String REGISTRATION_TOPIC = "todoapp.user.registration.topic";
 }

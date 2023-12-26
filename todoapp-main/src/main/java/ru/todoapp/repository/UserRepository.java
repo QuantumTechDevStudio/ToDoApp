@@ -38,7 +38,7 @@ public class UserRepository {
      * @param uuid - UUID нового пользователя
      * @return true если пользователь существует, false если пользователся с предоставленным UUID нет
      */
-    public boolean check(String uuid) {
+    public boolean exists(String uuid) {
         return jdbcClient.sql(SQL_CHECK_EXISTING).params(uuid).query(new UserRowMapper()).list().size() > 0;
     }
 

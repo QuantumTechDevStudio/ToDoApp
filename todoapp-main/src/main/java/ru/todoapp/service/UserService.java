@@ -1,20 +1,21 @@
 package ru.todoapp.service;
 
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.todoapp.model.RequestEntity;
 import ru.todoapp.model.UserEntity;
 import ru.todoapp.model.dto.RequestResultDTO;
 import ru.todoapp.model.dto.RequestStatus;
-import ru.todoapp.model.dto.UserRequestDTO;
+import ru.todoapp.model.dto.RegisterRequestDTO;
 import ru.todoapp.repository.RequestRepository;
 import ru.todoapp.repository.UserRepository;
 import ru.todoapp.utils.KafkaTopics;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,54 +27,50 @@ public class UserService {
     /**
      * Обработка запроса на добавление нового пользователя
      */
-    public void handle(UserRequestDTO userRequestDTO) {
-        requestRepository.save(RequestEntity.of(userRequestDTO));
+    public void handle(RegisterRequestDTO registerRequestDTO) {
+        requestRepository.save(RequestEntity.of(registerRequestDTO));
 
-        Optional<List<String>> unfilled = getAllUnfilledFields(userRequestDTO);
-        if (unfilled.isPresent()) {
-            var result = RequestResultDTO.builder()
-                    .requestUUID(userRequestDTO.getRequestUUID())
-                    .status(RequestStatus.FAIL)
-                    .message("Не заполнены обязательные поля: " + String.join(", ",unfilled.get()) + "! ")
-                    .build();
-            requestResultDTOKafkaTemplate.send(KafkaTopics.REQUEST_RESULT_TOPIC, result);
-        } else if (userRepository.check(userRequestDTO.getUserUUID())) {
-            var result = RequestResultDTO.builder()
-                    .requestUUID(userRequestDTO.getRequestUUID())
-                    .status(RequestStatus.FAIL)
-                    .message("Пользователь уже был зарегестрирован!")
-                    .build();
-            requestResultDTOKafkaTemplate.send(KafkaTopics.REQUEST_RESULT_TOPIC, result);
+        List<String> unfilled = getAllUnfilledFields(registerRequestDTO);
+        if (!unfilled.isEmpty()) {
+            sendRequestResultDTO(registerRequestDTO.getRequestUUID(), RequestStatus.FAIL,
+                    "Не заполнены обязательные поля: " + String.join(", ", unfilled) + "! ");
+        } else if (userRepository.exists(registerRequestDTO.getUserUUID())) {
+            sendRequestResultDTO(registerRequestDTO.getRequestUUID(), RequestStatus.FAIL,
+                    "Пользователь уже был зарегестрирован!");
         } else {
-            userRepository.saveUser(UserEntity.of(userRequestDTO));
-            var result = RequestResultDTO.builder()
-                    .requestUUID(userRequestDTO.getRequestUUID())
-                    .status(RequestStatus.SUCCESS)
-                    .build();
-            requestResultDTOKafkaTemplate.send(KafkaTopics.REQUEST_RESULT_TOPIC, result);
+            userRepository.saveUser(UserEntity.of(registerRequestDTO));
+            sendRequestResultDTO(registerRequestDTO.getRequestUUID(), RequestStatus.SUCCESS, null);
         }
     }
 
     /**
      * Создает список всех незаполненных параметров или возвращает пустое значение если все поля заполенены
-     * @param userRequestDTO - проверяем заполненность полей у пользователя
+     * @param registerRequestDTO - проверяем заполненность полей у пользователя
      */
-    private Optional<List<String>> getAllUnfilledFields(UserRequestDTO userRequestDTO) {
+    private List<String> getAllUnfilledFields(RegisterRequestDTO registerRequestDTO) {
         List<String> unfilled = new ArrayList<>();
-        if (StringUtils.isEmpty(userRequestDTO.getUserUUID()) {
+        if (StringUtils.isEmpty(registerRequestDTO.getUserUUID())) {
             unfilled.add("userUUID");
         }
-        if (userRequestDTO.getName() == null || userRequestDTO.getName().isEmpty() || userRequestDTO.getName().equals("")) {
+        if (StringUtils.isEmpty(registerRequestDTO.getName())) {
             unfilled.add("name");
         }
-        if (userRequestDTO.getSurname() == null || userRequestDTO.getSurname().isEmpty() || userRequestDTO.getSurname().equals("")) {
+        if (StringUtils.isEmpty(registerRequestDTO.getSurname())) {
             unfilled.add("surname");
         }
 
-        if (unfilled.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(unfilled);
-        }
+        return unfilled;
+    }
+
+    /**
+     * Метод отправляющий соответствующий ответ в Кафку
+     */
+    private void sendRequestResultDTO(String requestUUID, RequestStatus status, @Nullable String message) {
+        var result = RequestResultDTO.builder()
+                .requestUUID(requestUUID)
+                .status(status)
+                .message(message)
+                .build();
+        requestResultDTOKafkaTemplate.send(KafkaTopics.REQUEST_RESULT_TOPIC, result);
     }
 }
