@@ -12,6 +12,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import ru.todoapp.model.dto.PingRequestDTO;
 import ru.todoapp.model.dto.RequestResultDTO;
+import ru.todoapp.model.dto.RegisterRequestDTO;
 import ru.todoapp.utils.KafkaTopics;
 import ru.todoapp.utils.KafkaUtils;
 
@@ -64,6 +65,16 @@ public class KafkaConfig {
     }
 
     /**
+     * Создание топика в Kafka для регистраци
+     *
+     * @see RegisterRequestDTO
+     */
+    @Bean
+    public NewTopic userRegistrationTopic() {
+        return new NewTopic(KafkaTopics.REGISTRATION_TOPIC, 1, (short) 1);
+    }
+
+    /**
      * Фабрика консьюмеров для получения PingRequestDTO
      */
     @Bean
@@ -96,5 +107,18 @@ public class KafkaConfig {
     @Bean
     public KafkaTemplate<String, RequestResultDTO> requestResultDTOKafkaTemplate() {
         return new KafkaTemplate<>(requestResultDTOProducerFactory());
+    }
+
+    @Bean
+    public ConsumerFactory<String, RegisterRequestDTO> userRegistrationConsumerFactory() {
+        return KafkaUtils.getKafkaConsumerFactory(RegisterRequestDTO.class, GROUP_ID, kafkaUrl);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, RegisterRequestDTO> userRegistrationRequestContainerFactory() {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, RegisterRequestDTO>();
+
+        factory.setConsumerFactory(userRegistrationConsumerFactory());
+        return factory;
     }
 }
