@@ -23,7 +23,7 @@ public class KafkaUserListener {
     @KafkaListener(topics = KafkaTopics.REGISTRATION_TOPIC,
             groupId = KafkaConfig.GROUP_ID,
             containerFactory = "userRegistrationRequestContainerFactory")
-    public void handleUserRegistrationMassage(RegisterRequestDTO registerRequestDTO) {
+    public void handleUserRegistrationMessage(RegisterRequestDTO registerRequestDTO) {
         log.info("Received message with type \"{}\": {}", registerRequestDTO.getType(), registerRequestDTO);
         if (registerRequestDTO.getType() != null) {
             userService.handle(registerRequestDTO);
