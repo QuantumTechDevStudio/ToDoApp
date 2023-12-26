@@ -60,7 +60,7 @@ public class UserService {
      */
     private Optional<List<String>> getAllUnfilledFields(UserRequestDTO userRequestDTO) {
         List<String> unfilled = new ArrayList<>();
-        if (userRequestDTO.getUserUUID() == null || userRequestDTO.getUserUUID().isEmpty() || userRequestDTO.getUserUUID().equals("")) {
+        if (StringUtils.isEmpty(userRequestDTO.getUserUUID()) {
             unfilled.add("userUUID");
         }
         if (userRequestDTO.getName() == null || userRequestDTO.getName().isEmpty() || userRequestDTO.getName().equals("")) {
