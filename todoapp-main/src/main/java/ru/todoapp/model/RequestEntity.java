@@ -6,11 +6,11 @@ import ru.todoapp.model.dto.RequestType;
 import java.time.Instant;
 
 /**
- * Сущность "запрос" для сохранения информации о запросе в БД
+ * "Request" entity for saving information about request in DataBase
  *
- * @param requestUUID      уникальный UUID запроса - первичный ключ
- * @param requestType      - тип запроса
- * @param requestTimestamp - временная метка запроса
+ * @param requestUUID      unique request UUID - primary key
+ * @param requestType      - request type
+ * @param requestTimestamp - request timestamp
  */
 public record RequestEntity(String requestUUID, RequestType requestType, Instant requestTimestamp) {
     public static RequestEntity of(RequestDTO request) {

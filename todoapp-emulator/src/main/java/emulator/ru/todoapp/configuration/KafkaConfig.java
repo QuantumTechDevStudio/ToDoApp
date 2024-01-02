@@ -29,13 +29,13 @@ public class KafkaConfig {
 
 
     /**
-     * URL for Kafka
+     * Kafka URL
      */
     @Value("${todoapp.kafka.url}")
     private String kafkaUrl;
 
     /**
-     * Bean with Kafka settings
+     * Kafka settings bean
      */
     @Bean
     public KafkaAdmin kafkaAdmin() {

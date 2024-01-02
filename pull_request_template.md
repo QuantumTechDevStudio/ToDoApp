@@ -1,9 +1,9 @@
-### Задача
+### Task
 
-[Ссылка на задачу](https://andrey-tsvetkov.youtrack.cloud/issue/)
+[Task link](https://andrey-tsvetkov.youtrack.cloud/issue/)
 
-### Краткое описание задачи
+### Short task description
 
-### Условия готовности
+### Readiness conditions
 
-- [ ] Unit-тесты
+- [ ] Unit-tests
