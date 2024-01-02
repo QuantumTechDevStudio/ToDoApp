@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Конфигурация для Kafka
+ * Kafka configuration
  */
 @Configuration
 public class KafkaConfig {
@@ -29,13 +29,13 @@ public class KafkaConfig {
 
 
     /**
-     * URL для Kafka
+     * URL for Kafka
      */
     @Value("${todoapp.kafka.url}")
     private String kafkaUrl;
 
     /**
-     * Бин с настройками кафки
+     * Bean with Kafka settings
      */
     @Bean
     public KafkaAdmin kafkaAdmin() {
@@ -46,7 +46,7 @@ public class KafkaConfig {
     }
 
     /**
-     * Создание топика в Kafka для PingRequest
+     * Kafka topic creation for PingRequest
      *
      * @see PingRequestDTO
      */
@@ -56,7 +56,7 @@ public class KafkaConfig {
     }
 
     /**
-     * Создание топика в Kafka для отправки результата запроса
+     * Kafka topic creation for sending request result
      *
      * @see ru.todoapp.model.dto.RequestResultDTO
      */
@@ -66,7 +66,7 @@ public class KafkaConfig {
     }
 
     /**
-     * Создание топика в Kafka для регистрации
+     * Kafka topic creation for registration
      *
      * @see RegisterRequestDTO
      */
@@ -76,7 +76,7 @@ public class KafkaConfig {
     }
 
     /**
-     * Бин фабрики продюсеров для отправки PingRequest
+     * Producer factory bean for sending PingRequest
      */
     @Bean
     public ProducerFactory<String, PingRequestDTO> requestResultDTOProducerFactory() {
@@ -84,7 +84,7 @@ public class KafkaConfig {
     }
 
     /**
-     * Бин KafkaTemplate для отправки PingRequest
+     * KafkaTemplate bean for sending PingRequest
      */
     @Bean
     public KafkaTemplate<String, PingRequestDTO> requestResultDTOKafkaTemplate() {
@@ -92,7 +92,7 @@ public class KafkaConfig {
     }
 
     /**
-     * Фабрика консьюмеров для получения RequestResultDTO
+     * Consumer factory for receiving RequestResultDTO
      */
     @Bean
     public ConsumerFactory<String, RequestResultDTO> requstResultConsumerFactory() {
@@ -100,7 +100,7 @@ public class KafkaConfig {
     }
 
     /**
-     * Фабрика listener для получения RequestResultDTO
+     * Listener factory for receiving RequestResultDTO
      */
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, RequestResultDTO> requestResultContainerFactory() {
@@ -111,7 +111,7 @@ public class KafkaConfig {
     }
 
     /**
-     * Бин фабрики продюсеров для отправки RegisterRequestDTO
+     * Producer factory bean for sending RegisterRequestDTO
      */
     @Bean
     public ProducerFactory<String, RegisterRequestDTO> requestUserRequestProducerFactory() {
@@ -119,7 +119,7 @@ public class KafkaConfig {
     }
 
     /**
-     * Бин KafkaTemplate для отправки RegisterRequestDTO
+     * KafkaTemplate bean for sending RegisterRequestDTO
      */
     @Bean
     public KafkaTemplate<String, RegisterRequestDTO> requestUserResultDTOKafkaTemplate() {
