@@ -4,21 +4,21 @@ import ru.todoapp.model.dto.RegisterRequestDTO;
 
 public class KafkaTopics {
     /**
-     * Топик в кафке для отправки PingRequestDTO
+     * Topic in Kafka for sending PingRequestDTO
      *
      * @see ru.todoapp.model.dto.PingRequestDTO
      */
     public static final String PING_TOPIC = "todoapp.ping.topic";
 
     /**
-     * Топик в кафке для отправки RequestResultDTO
+     * Topic in Kafka for sending RequestResultDTO
      *
      * @see ru.todoapp.model.dto.RequestResultDTO
      */
     public static final String REQUEST_RESULT_TOPIC = "todoapp.request.result.topic";
 
     /**
-     * Топик в кафке для отправки UserRequestDTO
+     * Topic in Kafka for sending UserRequestDTO
      *
      * @see RegisterRequestDTO
      */
