@@ -14,7 +14,7 @@ import ru.todoapp.utils.KafkaTopics;
 import java.util.UUID;
 
 /**
- * Основной контролер для эмулятора
+ * Primary emulator controller
  */
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +24,8 @@ public class EmulatorController {
     private final KafkaTemplate<String, RegisterRequestDTO> registrationRequestKafkaTemplate;
 
     /**
-     * Обработка запроса Ping.
-     * Пересылает сообщение в соответствующий топик Kafka
+     * Ping request processing.
+     * Reposts message is corresponding Kafka topic
      */
     @PostMapping("/ping")
     public void ping(@RequestBody PingRequestEmulatorDTO requestDTO) {
@@ -34,10 +34,10 @@ public class EmulatorController {
     }
 
     /**
-     * Обработка запроса Register.
-     * Отправляет запрос на регистрацию пользователя, должен получать ответ от Kafka об успехе/провале регистрации
-     * с соответсвующим сообщением
-     * @param registerRequestEmulatorDTO - параметр эмулирующий регистрацию пользователя
+     * Registration request processing.
+     * Sends request for user registration, should receive response from Kafka with success/fail result of registration
+     * containing corresponding message
+     * @param registerRequestEmulatorDTO - parameter that emulates user registration
      */
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequestEmulatorDTO registerRequestEmulatorDTO) {

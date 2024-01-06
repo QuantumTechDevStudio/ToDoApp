@@ -1,15 +1,15 @@
 package ru.todoapp.model.dto;
 
 /**
- * Статус успешности выполнения запроса
+ * Request execution success status
  */
 public enum RequestStatus {
     /**
-     * Запрос выполнен успешно
+     * Request executed successfully
      */
     SUCCESS,
     /**
-     * Запрос выполнен неуспешно
+     * Request executed unsuccessfully
      */
     FAIL
 }

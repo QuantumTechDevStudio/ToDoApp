@@ -3,8 +3,8 @@ package ru.todoapp.model.dto;
 import lombok.NoArgsConstructor;
 
 /**
- * Запрос Ping.
- * Позволяет проверить, что сервис получает данные из Kafka
+ * Ping request.
+ * Allows to check that service receives data from Kafka
  */
 @NoArgsConstructor
 public class PingRequestDTO extends RequestDTO {

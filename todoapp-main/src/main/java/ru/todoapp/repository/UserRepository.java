@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
- * Репозиторий сохранения и доступа к пользователям
+ * Repository for saving and accessing users
  */
 @Repository
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class UserRepository {
     private final JdbcClient jdbcClient;
 
     /**
-     * Добавление нового пользователя
+     * Saving new user
      */
     public void saveUser(UserEntity userEntity) {
         var params = Arrays.asList(userEntity.userUUID(), userEntity.name(), userEntity.surname());
@@ -33,17 +33,17 @@ public class UserRepository {
     }
 
     /**
-     * Выполнение проверки существования пользователя c UUID
+     * Check for already registered user with provided UUID
      *
-     * @param uuid - UUID нового пользователя
-     * @return true если пользователь существует, false если пользователся с предоставленным UUID нет
+     * @param uuid - UUID provided for check
+     * @return true if user already registered, false if no user with provided UUID was found
      */
     public boolean exists(String uuid) {
         return jdbcClient.sql(SQL_CHECK_EXISTING).params(uuid).query(new UserRowMapper()).list().size() > 0;
     }
 
     /**
-     * Правильно мапит результаты из БД в UserEntity
+     * Mapping DataBase rows to UserEntity
      */
     private static class UserRowMapper implements RowMapper<UserEntity> {
         @Override

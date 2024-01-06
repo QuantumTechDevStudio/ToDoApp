@@ -3,9 +3,9 @@ package emulator.ru.todoapp.model;
 /**
  * Запрос Register.
  *
- * @param userUUID  UUID пользователя
- * @param name      Имя пользователя
- * @param surname   Фамилия пользователя
+ * @param userUUID  users UUID
+ * @param name      users name
+ * @param surname   users surname
  */
 public record RegisterRequestEmulatorDTO(String userUUID, String name, String surname) {
 }

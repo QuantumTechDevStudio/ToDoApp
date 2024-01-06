@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 
 /**
- * Репозиторий для сохранения информации о запросах
+ * Repository for saving request information
  */
 @Repository
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class RequestRepository {
     private final JdbcClient jdbcClient;
 
     /**
-     * Сохранение информации о запросе
+     * Saving request Information
      */
     public void save(RequestEntity requestEntity) {
         var requestTimestamp = new Timestamp(requestEntity.requestTimestamp().toEpochMilli());

@@ -8,13 +8,13 @@ import ru.todoapp.model.dto.RequestResultDTO;
 import ru.todoapp.utils.KafkaTopics;
 
 /**
- * Listener сообщений о результате выполнения запроса
+ * Request result message listener
  */
 @Slf4j
 @Service
 public class RequestResultListener {
     /**
-     * Обработчик сообщений из Kafka для RequestResultDTO
+     * Kafka massage handler for RequestResultDTO
      */
     @KafkaListener(topics = KafkaTopics.REQUEST_RESULT_TOPIC,
             groupId = KafkaConfig.GROUP_ID,

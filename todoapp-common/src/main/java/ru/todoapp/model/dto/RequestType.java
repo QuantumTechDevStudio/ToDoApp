@@ -1,16 +1,16 @@
 package ru.todoapp.model.dto;
 
 /**
- * Тип запроса
+ * Request Type
  */
 public enum RequestType {
     /**
-     * Тестовый запрос - Ping
+     * Test Request - Ping
      */
     PING,
 
     /**
-     * Запрос на регистрацию
+     * Registration request
      */
     REGISTER
 }

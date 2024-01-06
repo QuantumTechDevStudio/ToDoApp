@@ -10,7 +10,7 @@ import ru.todoapp.service.PingService;
 import ru.todoapp.utils.KafkaTopics;
 
 /**
- * Listener для обработки сообщений Ping
+ * Ping message processing Listener
  */
 @Slf4j
 @Service
@@ -19,7 +19,7 @@ public class KafkaPingListener {
     private final PingService pingService;
 
     /**
-     * Обработчик сообщений PingRequestDTO, получаемых из Kafka
+     * PingRequestDTO massage received from Kafka handler
      *
      * @see PingRequestDTO
      */
