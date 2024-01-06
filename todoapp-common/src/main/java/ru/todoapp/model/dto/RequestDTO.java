@@ -5,24 +5,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Базовый класс запроса
+ * Basic request class
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class RequestDTO {
     /**
-     * Уникальный UUID запроса
+     * Unique request UUID
      */
     private String requestUUID;
 
     /**
-     * UUID пользователя
+     * User UUID
      */
     private String userUUID;
 
     /**
-     * Тип запроса
+     * Request type
      */
     private RequestType type;
 }

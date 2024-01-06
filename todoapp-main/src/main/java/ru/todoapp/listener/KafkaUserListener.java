@@ -16,7 +16,7 @@ public class KafkaUserListener {
     private final UserService userService;
 
     /**
-     * Обработчик сообщений UserRequestDTO, получаемых из Kafka
+     * UserRequestDTO massage received from Kafka
      *
      * @see RegisterRequestDTO
      */

@@ -4,17 +4,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Запрос на обработку регистации пользователя
+ * Register request.
+ * Allows for user to be registered
  */
 @Getter
 @NoArgsConstructor
 public class RegisterRequestDTO extends RequestDTO {
     /**
-     * имя
+     * name
      */
     private String name;
     /**
-     * фамилия
+     * surname
      */
     private String surname;
     public RegisterRequestDTO(String requestUUID, String userUUID, String name, String surname) {

@@ -15,16 +15,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Класс с утилитками, которые упрощают работу с Kafka
+ * Class with utilities, that simplify work with Kafka
  */
 public class KafkaUtils {
     /**
-     * Метод, создающий фабрику консьюмеров для заданного типа.
-     * Для десериалзации значений используется Jackson.
+     * Method that creates consumer factory of requested type.
+     * For value deserialization Jackson is used.
      *
-     * @param messageClass класс, для которого нужны консьюмеры
-     * @param groupId      имя группы консьюмеров
-     * @param kafkaUrl     адрес кафки
+     * @param messageClass class that requires consumers
+     * @param groupId      name of the consumer group
+     * @param kafkaUrl     Kafka address
      */
     public static <T> ConsumerFactory<String, T> getKafkaConsumerFactory(Class<T> messageClass, String groupId, String kafkaUrl) {
         var deserializer = new JsonDeserializer<>(messageClass);
@@ -52,10 +52,10 @@ public class KafkaUtils {
     }
 
     /**
-     * Метод, создающий фабрику продюсеров для заданного типа.
-     * Сериализация происходит в формат JSON при помощи Jackson
+     * Method that creates producer factory of requested type.
+     * For value deserialization Jackson is used.
      *
-     * @param kafkaUrl адрес кафки
+     * @param kafkaUrl Kafka address
      */
     public static <T> ProducerFactory<String, T> getKafkaProducerFactory(String kafkaUrl) {
         Map<String, Object> configProps = new HashMap<>();

@@ -1,13 +1,13 @@
 # ToDoApp
 
-## Зависимости:
+## Dependencies:
 
 1. Java 21
-2. Gradle 8.5 (или wrapper)
+2. Gradle 8.5 (or wrapper)
 3. Docker
 4. PostgreSQL
 
-## Порядок запуска:
+## Execution order:
 
-1. Сначала запускается docker-compose файл из папки docker, для поднятия Kafka
-2. Затем запускаются сервисы ToDoAppMainApplication и ToDoAppEmulatorApplication (в любом порядке)
+1. First runs docker-compose file from docker folder, to launch Kafka
+2. After services ToDoAppMainApplication and ToDoAppEmulatorApplication is launched (in any order)

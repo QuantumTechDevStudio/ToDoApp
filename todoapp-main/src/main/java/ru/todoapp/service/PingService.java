@@ -13,7 +13,7 @@ import ru.todoapp.utils.KafkaTopics;
 import java.time.LocalDateTime;
 
 /**
- * Сервис для обработки Ping запросов
+ * Service for Ping request
  */
 @Service
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class PingService {
     private final RequestRepository requestRepository;
 
     /**
-     * Обработчик запроса PingRequestDTO
+     * PingRequestDTO request handler
      */
     public void handle(PingRequestDTO request) {
         requestRepository.save(RequestEntity.of(request));

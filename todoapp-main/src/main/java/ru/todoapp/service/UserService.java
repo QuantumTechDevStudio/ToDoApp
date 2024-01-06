@@ -17,6 +17,9 @@ import ru.todoapp.utils.KafkaTopics;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service for User requests
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -25,7 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     /**
-     * Обработка запроса на добавление нового пользователя
+     * New user registration request handler
      */
     public void handle(RegisterRequestDTO registerRequestDTO) {
         requestRepository.save(RequestEntity.of(registerRequestDTO));
@@ -33,10 +36,10 @@ public class UserService {
         List<String> unfilled = getAllUnfilledFields(registerRequestDTO);
         if (!unfilled.isEmpty()) {
             sendRequestResultDTO(registerRequestDTO.getRequestUUID(), RequestStatus.FAIL,
-                    "Не заполнены обязательные поля: " + String.join(", ", unfilled) + "! ");
+                    "Unfilled required fields: " + String.join(", ", unfilled) + "!");
         } else if (userRepository.exists(registerRequestDTO.getUserUUID())) {
             sendRequestResultDTO(registerRequestDTO.getRequestUUID(), RequestStatus.FAIL,
-                    "Пользователь уже был зарегестрирован!");
+                    "User already registered!");
         } else {
             userRepository.saveUser(UserEntity.of(registerRequestDTO));
             sendRequestResultDTO(registerRequestDTO.getRequestUUID(), RequestStatus.SUCCESS, null);
@@ -44,8 +47,8 @@ public class UserService {
     }
 
     /**
-     * Создает список всех незаполненных параметров или возвращает пустое значение если все поля заполенены
-     * @param registerRequestDTO - проверяем заполненность полей у пользователя
+     * Creates the list of all unfilled fields returns empty if no such fields are found
+     * @param registerRequestDTO - users registration request to whom check is performed
      */
     private List<String> getAllUnfilledFields(RegisterRequestDTO registerRequestDTO) {
         List<String> unfilled = new ArrayList<>();
@@ -63,7 +66,7 @@ public class UserService {
     }
 
     /**
-     * Метод отправляющий соответствующий ответ в Кафку
+     * method that sends response in Kafka
      */
     private void sendRequestResultDTO(String requestUUID, RequestStatus status, @Nullable String message) {
         var result = RequestResultDTO.builder()

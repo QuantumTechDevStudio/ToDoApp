@@ -1,9 +1,9 @@
 package emulator.ru.todoapp.model;
 
 /**
- * Запрос Ping
+ * Ping request
  *
- * @param userUUID UUID пользователя
+ * @param userUUID users UUID
  * @see ru.todoapp.model.dto.PingRequestDTO
  */
 public record PingRequestEmulatorDTO(String userUUID) {

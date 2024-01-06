@@ -7,12 +7,12 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import javax.sql.DataSource;
 
 /**
- * Конфигурация JDBC клиента
+ * JDBC client configuration
  */
 @Configuration
 public class JdbcClientConfig {
     /**
-     * Бин JdbcClient, создаваемый из DataSource
+     * JdbcClient bean, that creates from DataSource
      */
     @Bean
     public JdbcClient jdbcClient(DataSource dataSource) {
