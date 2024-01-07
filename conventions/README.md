@@ -10,8 +10,8 @@ For complete conventions follow the [link](https://andrey-tsvetkov.youtrack.clou
 1. Spaces instead of tabs.
 2. Encoding UTF-8\*.
 3. Line breaks in Unix-style (LF)\*.
-4. Длина строки: рекомендуемая — 140 символов, допустимая — 170.
-5. Отсутствие пробелов в конце строки (trailing space).
+4. Line length: recommended - 140 characters, allowed - 170.
+5. No spaces at the end of the line (trailing space).
 
 #### Java
 
