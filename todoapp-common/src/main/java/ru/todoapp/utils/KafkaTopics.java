@@ -22,5 +22,10 @@ public class KafkaTopics {
      */
     public static final String REGISTRATION_TOPIC = "todoapp.user.registration.topic";
 
-
+    /**
+     * Topic in Kafka for sending AddTaskRequestDTO
+     *
+     * @see ru.todoapp.model.dto.AddTaskRequestDTO
+     */
+    public static final String ADD_TASK_TOPIC = "todoapp.tasks.addition.topic";
 }

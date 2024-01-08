@@ -12,5 +12,10 @@ public enum RequestType {
     /**
      * Registration request
      */
-    REGISTER
+    REGISTER,
+
+    /**
+     * Request for adding a task
+     */
+    ADD_TASK
 }
