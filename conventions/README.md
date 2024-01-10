@@ -2,8 +2,8 @@
 
 ## Coding style
 
-The default style from the IntelliJ IDEA distribution is used, with the following additions and clarifications. 
-For complete conventions follow the [link](https://andrey-tsvetkov.youtrack.cloud/articles/TDA-A-1/Conventions).
+The default style from the IntelliJ IDEA distribution is used, with the following additions and clarifications.
+For complete conventions follow the [link](https://todoapp.youtrack.cloud/articles/TDA-A-1/Conventions).
 
 #### Code files
 
