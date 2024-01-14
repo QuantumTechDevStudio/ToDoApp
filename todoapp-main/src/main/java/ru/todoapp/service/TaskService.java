@@ -16,6 +16,7 @@ import ru.todoapp.repository.UserRepository;
 import ru.todoapp.utils.KafkaTopics;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class TaskService {
         if (StringUtils.isEmpty(addTaskRequestDTO.getDescription())) {
             unfilled.add("description");
         }
-        if (StringUtils.isEmpty(addTaskRequestDTO.getDatetime())) {
+        if (addTaskRequestDTO.getDatetime() == null) {
             unfilled.add("datetime");
         }
         return unfilled;
@@ -91,9 +92,9 @@ public class TaskService {
      * method to check for correct formatting
      * @param time to check for formatting
      */
-    private boolean correctTimeFormat(String time) {
+    private boolean correctTimeFormat(ZonedDateTime time) {
         try {
-            Instant.parse(time + ":00:00");
+            time.toInstant();
             return true;
         } catch (DateTimeParseException e) {
             return false;
@@ -103,7 +104,7 @@ public class TaskService {
     /**
      * method that creates correct Instant of time
      */
-    private Instant getTimeInstant(String time) {
-        return Instant.parse(time  + ":00:00");
+    private Instant getTimeInstant(ZonedDateTime time) {
+        return time.toInstant();
     }
 }
