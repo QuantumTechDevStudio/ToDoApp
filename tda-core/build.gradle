@@ -1,0 +1,7 @@
+dependencies {
+    implementation commonModule
+    implementation broker.impl
+    implementation database.impl
+    implementation database.runtime
+    implementation test.testImpl
+}

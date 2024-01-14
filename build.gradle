@@ -1,31 +1,45 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.0'
+    id 'org.springframework.boot' version '3.2.1'
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+allprojects {
+    // Common group and version
+    group = 'quantenpfad.todoapp'
+    version = '1.0-SNAPSHOT'
+    // Common plugins
+    apply from: "$thisObject.projectDir/dependencies.gradle"
+    apply from: "$thisObject.projectDir/modules.gradle"
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-java {
-    sourceCompatibility = '21'
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+    //  Common dependencies
+    dependencies {
+        implementation common.compile
+        compileOnly common.impl
+        annotationProcessor common.annotation
+        testImplementation test.testImpl
     }
-}
 
-repositories {
-    mavenCentral()
-}
+    // Common java compatibility
+    java {
+        sourceCompatibility = '21'
+    }
 
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
+    // Common repositories
+    repositories {
+        mavenCentral()
+    }
 
-test {
-    useJUnitPlatform()
+    configurations {
+        compileOnly.extendsFrom annotationProcessor
+        testCompileOnly.extendsFrom annotationProcessor
+        testAnnotationProcessor.extendsFrom annotationProcessor
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }

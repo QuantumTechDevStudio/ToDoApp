@@ -1,0 +1,6 @@
+import org.gradle.api.internal.project.DefaultProject
+
+ext.mainModule = project(':tda-core') as DefaultProject
+ext.commonModule = project(':tda-common') as DefaultProject
+ext.emulatorModule = project(':tda-emulator') as DefaultProject
+ext.telegramModule = project(':tda-telegrambot') as DefaultProject

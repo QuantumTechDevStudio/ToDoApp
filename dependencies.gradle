@@ -1,0 +1,65 @@
+// Arrays with specific dependencies for root and sub projects
+
+// Common Dependencies
+ext.common = [
+        'compile'   : [
+                'org.projectlombok:lombok'
+        ],
+        'impl'      : [
+                'org.springframework.boot:spring-boot-starter'
+        ],
+        'annotation': [
+                'org.springframework.boot:spring-boot-configuration-processor',
+                'org.projectlombok:lombok'
+        ]
+]
+
+// Message broker dependencies
+ext.broker = [
+        'impl': [
+                'org.springframework.kafka:spring-kafka'
+        ]
+]
+
+// External messaging dependencies
+ext.messages = [
+        'impl': [
+                'org.telegram:telegrambots:6.8.0'
+        ]
+]
+
+// Datasource dependencies
+ext.database = [
+        'impl'   : [
+                'org.springframework.boot:spring-boot-starter-data-jdbc',
+                'org.flywaydb:flyway-maven-plugin:10.3.0'
+        ],
+        'runtime': [
+                'org.postgresql:postgresql'
+        ]
+]
+
+ext.data = [
+        'impl': [
+                'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+        ]
+]
+
+// Web dependencies
+ext.web = [
+        'impl': [
+                'org.springframework.boot:spring-boot-starter-web'
+        ]
+]
+
+// Testing dependencies
+ext.test = [
+        'testImpl'   : [
+                'org.springframework.boot:spring-boot-starter-test',
+                'org.springframework.kafka:spring-kafka-test',
+                'org.junit.jupiter:junit-jupiter-api:5.8.1'
+        ],
+        'testRuntime': [
+                'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+        ]
+]

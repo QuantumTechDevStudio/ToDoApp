@@ -1,2 +1,5 @@
 *.gitignore @aeDeaf
+*.md @aeDeaf
+*.properties @aeDeaf
+*.sql @aeDeaf @Addm1X
 *.gradle @aeDeaf @Addm1X

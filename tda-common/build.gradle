@@ -1,0 +1,6 @@
+dependencies {
+    implementation broker.impl
+    implementation data.impl
+    implementation test.testImpl
+    implementation test.testRuntime
+}

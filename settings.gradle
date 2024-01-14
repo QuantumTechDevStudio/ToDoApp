@@ -1,5 +1,6 @@
 rootProject.name = 'todoapp'
-include "todoapp-main"
-include 'todoapp-common'
-include 'todoapp-emulator'
+include "tda-core"
+include 'tda-common'
+include 'tda-emulator'
+include 'tda-telegrambot'
 
