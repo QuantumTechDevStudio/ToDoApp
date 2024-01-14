@@ -8,6 +8,7 @@ allprojects {
     // Common group and version
     group = 'quantenpfad.todoapp'
     version = '1.0-SNAPSHOT'
+
     // Common plugins
     apply from: "$thisObject.projectDir/dependencies.gradle"
     apply from: "$thisObject.projectDir/modules.gradle"
@@ -35,6 +36,7 @@ allprojects {
 
     configurations {
         compileOnly.extendsFrom annotationProcessor
+        // With that, we can use Lombok in tests
         testCompileOnly.extendsFrom annotationProcessor
         testAnnotationProcessor.extendsFrom annotationProcessor
     }

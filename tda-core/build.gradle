@@ -1,5 +1,6 @@
 dependencies {
     implementation commonModule
+    implementation telegramModule
     implementation broker.impl
     implementation database.impl
     implementation database.runtime
