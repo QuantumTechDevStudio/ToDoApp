@@ -1,5 +1,6 @@
 package emulator.ru.todoapp.controller;
 
+import emulator.ru.todoapp.model.AddTaskRequestEmulatorDTO;
 import emulator.ru.todoapp.model.PingRequestEmulatorDTO;
 import emulator.ru.todoapp.model.RegisterRequestEmulatorDTO;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.todoapp.model.dto.AddTaskRequestDTO;
 import ru.todoapp.model.dto.PingRequestDTO;
 import ru.todoapp.model.dto.RegisterRequestDTO;
 import ru.todoapp.utils.KafkaTopics;
@@ -22,6 +24,8 @@ public class EmulatorController {
     private final KafkaTemplate<String, PingRequestDTO> pingRequestKafkaTemplate;
 
     private final KafkaTemplate<String, RegisterRequestDTO> registrationRequestKafkaTemplate;
+
+    private final KafkaTemplate<String, AddTaskRequestDTO> addTaskRequestKafkaTemplate;
 
     /**
      * Ping request processing.
@@ -54,5 +58,21 @@ public class EmulatorController {
                     registerRequestEmulatorDTO.surname());
         }
         registrationRequestKafkaTemplate.send(KafkaTopics.REGISTRATION_TOPIC, request);
+    }
+
+    /**
+     * Addition of new task request processing.
+     * Sends request for adding new task for user, receives response from Kafka with success/fail result of registration
+     * containing corresponding message
+     * @param addTaskRequestEmulatorDTO - parameter that emulates the action of user adding task for himself
+     */
+    @PostMapping("/add_new_task")
+    public void addNewTask(@RequestBody AddTaskRequestEmulatorDTO addTaskRequestEmulatorDTO) {
+        AddTaskRequestDTO addTaskRequestDTO;
+        addTaskRequestDTO = new AddTaskRequestDTO(UUID.randomUUID().toString(),
+                addTaskRequestEmulatorDTO.userUUID(),
+                addTaskRequestEmulatorDTO.description(),
+                addTaskRequestEmulatorDTO.zonedDateTime());
+        addTaskRequestKafkaTemplate.send(KafkaTopics.ADD_TASK_TOPIC, addTaskRequestDTO);
     }
 }
