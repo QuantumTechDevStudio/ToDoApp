@@ -13,7 +13,6 @@ import ru.todoapp.model.dto.PingRequestDTO;
 import ru.todoapp.model.dto.RegisterRequestDTO;
 import ru.todoapp.utils.KafkaTopics;
 
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**
@@ -73,7 +72,7 @@ public class EmulatorController {
         addTaskRequestDTO = new AddTaskRequestDTO(UUID.randomUUID().toString(),
                 addTaskRequestEmulatorDTO.userUUID(),
                 addTaskRequestEmulatorDTO.description(),
-                ZonedDateTime.parse(addTaskRequestEmulatorDTO.zonedDateTime()));
+                addTaskRequestEmulatorDTO.zonedDateTime());
         addTaskRequestKafkaTemplate.send(KafkaTopics.ADD_TASK_TOPIC, addTaskRequestDTO);
     }
 }

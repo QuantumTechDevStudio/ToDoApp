@@ -3,8 +3,6 @@ package ru.todoapp.model.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.ZonedDateTime;
-
 /**
  * Add task request.
  * Allows for user to save new planned tasks for themselves
@@ -22,9 +20,9 @@ public class AddTaskRequestDTO extends RequestDTO {
      */
     private String datetime;
 
-    public AddTaskRequestDTO(String requestUUID, String userUUID, String description, ZonedDateTime datetime) {
+    public AddTaskRequestDTO(String requestUUID, String userUUID, String description, String datetime) {
         super(requestUUID, userUUID, RequestType.ADD_TASK);
         this.description = description;
-        this.datetime = datetime.toString();
+        this.datetime = datetime;
     }
 }
