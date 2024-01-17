@@ -14,9 +14,9 @@ import ru.todoapp.repository.RequestRepository;
 import ru.todoapp.repository.TaskRepository;
 import ru.todoapp.repository.UserRepository;
 import ru.todoapp.utils.KafkaTopics;
+import ru.todoapp.utils.TimeUtils;
 
 import java.time.Instant;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class TaskService {
         } else if (!userRepository.exists(addTaskRequestDTO.getUserUUID())) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.FAIL,
                     "Can't find user!");
-        } else if (!isCorrectTimeFormat(addTaskRequestDTO.getDatetime())) {
+        } else if (!TimeUtils.isCorrectTimeFormat(addTaskRequestDTO.getDatetime())) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.FAIL,
                     "Can't create task with incorrect datetime!");
         } else if (Instant.now().isAfter(getTimeInstant(addTaskRequestDTO.getDatetime()))) {
@@ -85,21 +85,6 @@ public class TaskService {
                 .message(message)
                 .build();
         requestResultDTOKafkaTemplate.send(KafkaTopics.REQUEST_RESULT_TOPIC, result);
-    }
-
-    /**
-     * method to check for correct formatting
-     *
-     * @param time to check for formatting
-     */
-    private boolean isCorrectTimeFormat(String time) {
-        try {
-            //TODO: try to avoid this method in general. Find some check for a legitemacy of time format for Instant
-            Instant.parse(time);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
     }
 
     /**

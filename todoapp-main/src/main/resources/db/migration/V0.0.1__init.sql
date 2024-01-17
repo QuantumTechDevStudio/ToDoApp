@@ -13,7 +13,7 @@ CREATE TABLE tda_task
 (
     id          BIGSERIAL PRIMARY KEY,
     description TEXT                            NOT NULL,
-    datetime    TIMESTAMP                       NOT NULL,
+    datetime    TIMESTAMP WITH TIME ZONE        NOT NULL,
     user_uuid   TEXT REFERENCES tda_user (uuid) NOT NULL
 );
 
