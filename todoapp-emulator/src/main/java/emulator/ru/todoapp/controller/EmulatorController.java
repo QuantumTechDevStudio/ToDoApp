@@ -62,8 +62,8 @@ public class EmulatorController {
 
     /**
      * Addition of new task request processing.
-     * Sends request for adding new task for user, receives response from Kafka with success/fail result of registration
-     * containing corresponding message
+     * Sends request for adding new task for user, receives response from Kafka with success/fail result of task
+     * addition containing corresponding message
      * @param addTaskRequestEmulatorDTO - parameter that emulates the action of user adding task for himself
      */
     @PostMapping("/add_new_task")
