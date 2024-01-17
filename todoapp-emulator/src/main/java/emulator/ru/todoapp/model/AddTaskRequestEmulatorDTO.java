@@ -1,7 +1,5 @@
 package emulator.ru.todoapp.model;
 
-import java.time.ZonedDateTime;
-
 /**
  * Request for adding new task.
  *
@@ -9,5 +7,5 @@ import java.time.ZonedDateTime;
  * @param description       task description
  * @param zonedDateTime     time of task to task place in
  */
-public record AddTaskRequestEmulatorDTO(String userUUID, String description, ZonedDateTime zonedDateTime) {
+public record AddTaskRequestEmulatorDTO(String userUUID, String description, String zonedDateTime) {
 }

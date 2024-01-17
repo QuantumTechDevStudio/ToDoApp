@@ -20,11 +20,11 @@ public class AddTaskRequestDTO extends RequestDTO {
     /**
      * datetime, when the task is planned to take place, in ISO 8601 format (yyyy-MM-ddThh:mm:ss+hh)
      */
-    private ZonedDateTime datetime;
+    private String datetime;
 
     public AddTaskRequestDTO(String requestUUID, String userUUID, String description, ZonedDateTime datetime) {
         super(requestUUID, userUUID, RequestType.ADD_TASK);
         this.description = description;
-        this.datetime = datetime;
+        this.datetime = datetime.toString();
     }
 }

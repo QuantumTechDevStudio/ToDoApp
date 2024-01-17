@@ -16,7 +16,6 @@ import ru.todoapp.repository.UserRepository;
 import ru.todoapp.utils.KafkaTopics;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +35,6 @@ public class TaskService {
      * Task addition handler
      */
     public void handle(AddTaskRequestDTO addTaskRequestDTO) {
-        requestRepository.save(RequestEntity.of(addTaskRequestDTO));
-
         List<String> unfilled = allUnfilledFields(addTaskRequestDTO);
         if (!unfilled.isEmpty()) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(),
@@ -56,6 +53,8 @@ public class TaskService {
             taskRepository.saveNewTask(SaveTaskEntity.of(addTaskRequestDTO));
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.SUCCESS, null);
         }
+
+        requestRepository.save(RequestEntity.of(addTaskRequestDTO));
     }
 
     /**
@@ -92,9 +91,9 @@ public class TaskService {
      * method to check for correct formatting
      * @param time to check for formatting
      */
-    private boolean correctTimeFormat(ZonedDateTime time) {
+    private boolean correctTimeFormat(String time) {
         try {
-            time.toInstant();
+            Instant.parse(time);
             return true;
         } catch (DateTimeParseException e) {
             return false;
@@ -104,7 +103,7 @@ public class TaskService {
     /**
      * method that creates correct Instant of time
      */
-    private Instant getTimeInstant(ZonedDateTime time) {
-        return time.toInstant();
+    private Instant getTimeInstant(String time) {
+        return Instant.parse(time);
     }
 }

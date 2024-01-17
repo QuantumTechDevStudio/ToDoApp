@@ -16,6 +16,6 @@ public record SaveTaskEntity(String description, String userUUID, Instant dateti
         return new SaveTaskEntity(
                 addTaskRequestDTO.getDescription(),
                 addTaskRequestDTO.getUserUUID(),
-                Instant.parse(addTaskRequestDTO.getDatetime() + ":00:00"));
+                Instant.parse(addTaskRequestDTO.getDatetime()));
     }
 }
