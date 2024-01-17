@@ -19,6 +19,7 @@ public class TaskRepository {
     private final JdbcClient jdbcClient;
 
     public void saveNewTask(SaveTaskEntity saveTaskEntity) {
+        //TODO: fix datetime to GMT+0
         var taskTimestamp = new Timestamp(saveTaskEntity.datetime().toEpochMilli());
         var params = Arrays.asList(
                 saveTaskEntity.description(),

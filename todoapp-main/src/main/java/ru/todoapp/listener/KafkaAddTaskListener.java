@@ -26,7 +26,7 @@ public class KafkaAddTaskListener {
     public void handleTaskAdditionMessage(AddTaskRequestDTO addTaskRequestDTO) {
         log.info("Received message with type \"{}\": {}", addTaskRequestDTO.getType(), addTaskRequestDTO);
         if (addTaskRequestDTO.getType() != null) {
-            taskService.handle(addTaskRequestDTO);
+            taskService.handleAddition(addTaskRequestDTO);
         }
     }
 }

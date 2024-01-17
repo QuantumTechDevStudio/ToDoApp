@@ -34,16 +34,16 @@ public class TaskService {
     /**
      * Task addition handler
      */
-    public void handle(AddTaskRequestDTO addTaskRequestDTO) {
+    public void handleAddition(AddTaskRequestDTO addTaskRequestDTO) {
         List<String> unfilled = allUnfilledFields(addTaskRequestDTO);
         if (!unfilled.isEmpty()) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(),
                     RequestStatus.FAIL,
                     "Fields: " + String.join(", ", unfilled) + " are empty!");
-        } else if (!userRepository.exists(addTaskRequestDTO.getUserUUID())){
+        } else if (!userRepository.exists(addTaskRequestDTO.getUserUUID())) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.FAIL,
                     "Can't find user!");
-        } else if (!correctTimeFormat(addTaskRequestDTO.getDatetime())) {
+        } else if (!isCorrectTimeFormat(addTaskRequestDTO.getDatetime())) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.FAIL,
                     "Can't create task with incorrect datetime!");
         } else if (Instant.now().isAfter(getTimeInstant(addTaskRequestDTO.getDatetime()))) {
@@ -89,10 +89,12 @@ public class TaskService {
 
     /**
      * method to check for correct formatting
+     *
      * @param time to check for formatting
      */
-    private boolean correctTimeFormat(String time) {
+    private boolean isCorrectTimeFormat(String time) {
         try {
+            //TODO: try to avoid this method in general. Find some check for a legitemacy of time format for Instant
             Instant.parse(time);
             return true;
         } catch (DateTimeParseException e) {
