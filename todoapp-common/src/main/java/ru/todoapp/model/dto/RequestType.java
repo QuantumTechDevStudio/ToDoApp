@@ -17,5 +17,10 @@ public enum RequestType {
     /**
      * Request for adding a task
      */
-    ADD_TASK
+    ADD_TASK,
+
+    /**
+     * Request for fetching tasks
+     */
+    FETCH_TASKS
 }

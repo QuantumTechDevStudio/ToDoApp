@@ -5,7 +5,8 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import ru.todoapp.model.SaveTaskEntity;
 
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 
 /**
@@ -22,10 +23,10 @@ public class TaskRepository {
      * Saves new task to DataBase
      */
     public void saveNewTask(SaveTaskEntity saveTaskEntity) {
-        var taskTimestamp = new Timestamp(saveTaskEntity.datetime().toEpochMilli());
+        OffsetDateTime offsetDateTime = saveTaskEntity.datetime().atOffset(ZoneOffset.UTC);
         var params = Arrays.asList(
                 saveTaskEntity.description(),
-                taskTimestamp,
+                offsetDateTime,
                 saveTaskEntity.userUUID());
         jdbcClient.sql(SAVE_NEW_TASK).params(params).update();
     }
