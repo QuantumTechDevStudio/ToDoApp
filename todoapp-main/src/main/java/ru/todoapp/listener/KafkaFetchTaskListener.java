@@ -16,12 +16,17 @@ public class KafkaFetchTaskListener {
     private final TaskService taskService;
 
     /**
+     * FetchTasksRequestDTO message received from Kafka
+     *
      * @see FetchTasksRequestDTO
      */
     @KafkaListener(topics = KafkaTopics.FETCH_REQUEST_TASKS_TOPIC,
             groupId = KafkaConfig.GROUP_ID,
             containerFactory = "fetchTaskRequestContainerFactory")
     public void handleTaskFetchingMessage(FetchTasksRequestDTO fetchTasksRequestDTO) {
-
+        log.info("Received message with type \"{}\": {}", fetchTasksRequestDTO.getType(), fetchTasksRequestDTO);
+        if (fetchTasksRequestDTO.getType() != null) {
+            taskService.handleFetching(fetchTasksRequestDTO);
+        }
     }
 }

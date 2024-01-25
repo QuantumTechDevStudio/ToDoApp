@@ -7,8 +7,6 @@ import ru.todoapp.model.GetTaskRequestEntity;
 import ru.todoapp.model.SaveTaskEntity;
 import ru.todoapp.model.TaskEntity;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,8 +18,7 @@ import java.util.List;
 public class TaskRepository {
     public static final String SAVE_NEW_TASK = "INSERT INTO tda_task (description, datetime, user_uuid) VALUES (?,?,?)";
 
-    //language=sql
-    public static final String GET_TASKS_FROM_TO = "SELECT (id, description, datetime) FROM tda_task WHERE user_uuid = ? AND datetime BETWEEN ? AND ?";
+    public static final String GET_TASKS_FROM_TO = "SELECT id, description, datetime FROM tda_task WHERE user_uuid = ? AND datetime BETWEEN ? AND ?";
 
     private final JdbcClient jdbcClient;
 
@@ -29,10 +26,9 @@ public class TaskRepository {
      * Saves new task to DataBase
      */
     public void saveNewTask(SaveTaskEntity saveTaskEntity) {
-        OffsetDateTime offsetDateTime = saveTaskEntity.datetime().atOffset(ZoneOffset.UTC);
         var params = Arrays.asList(
                 saveTaskEntity.description(),
-                offsetDateTime,
+                saveTaskEntity.datetime(),
                 saveTaskEntity.userUUID());
         jdbcClient.sql(SAVE_NEW_TASK).params(params).update();
     }
