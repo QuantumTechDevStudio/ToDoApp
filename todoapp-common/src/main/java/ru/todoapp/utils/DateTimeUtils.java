@@ -54,6 +54,6 @@ public class DateTimeUtils {
      */
     public static Instant setAtTheEndOfTheDay(String date) {
         String[] split = date.split("\\+");
-        return Instant.parse(split[0] + "T24:00:00+" + split[1]);
+        return Instant.parse(split[0] + "T23:59:59+" + split[1]);
     }
 }

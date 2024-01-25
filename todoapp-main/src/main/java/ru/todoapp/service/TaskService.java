@@ -47,7 +47,7 @@ public class TaskService {
         } else if (!DateTimeUtils.isCorrectTimeFormat(addTaskRequestDTO.getDatetime())) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.FAIL,
                     "Can't create task with incorrect datetime!");
-        } else if (Instant.now().isAfter(getTimeInstant(addTaskRequestDTO.getDatetime()))) {
+        } else if (Instant.now().isAfter(Instant.parse(addTaskRequestDTO.getDatetime()))) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.FAIL,
                     "Can't create task in past!");
         } else {
@@ -107,7 +107,7 @@ public class TaskService {
         if (StringUtils.isEmpty(addTaskRequestDTO.getDescription())) {
             unfilled.add("description");
         }
-        if (addTaskRequestDTO.getDatetime() == null) {
+        if (StringUtils.isEmpty(addTaskRequestDTO.getDatetime())) {
             unfilled.add("datetime");
         }
         return unfilled;
@@ -158,13 +158,6 @@ public class TaskService {
                 .message(message)
                 .build();
         requestResultDTOKafkaTemplate.send(KafkaTopics.REQUEST_RESULT_TOPIC, result);
-    }
-
-    /**
-     * method that creates correct Instant of time
-     */
-    private Instant getTimeInstant(String time) {
-        return Instant.parse(time);
     }
 
     /**
