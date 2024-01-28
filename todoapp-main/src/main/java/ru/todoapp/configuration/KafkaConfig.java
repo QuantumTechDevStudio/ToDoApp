@@ -10,7 +10,12 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import ru.todoapp.model.dto.*;
+import ru.todoapp.model.dto.AddTaskRequestDTO;
+import ru.todoapp.model.dto.FetchTasksRequestDTO;
+import ru.todoapp.model.dto.FetchTasksResponseDTO;
+import ru.todoapp.model.dto.PingRequestDTO;
+import ru.todoapp.model.dto.RegisterRequestDTO;
+import ru.todoapp.model.dto.RequestResultDTO;
 import ru.todoapp.utils.KafkaTopics;
 import ru.todoapp.utils.KafkaUtils;
 

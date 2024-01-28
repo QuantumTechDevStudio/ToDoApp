@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import ru.todoapp.model.GetTaskRequestEntity;
-import ru.todoapp.model.SaveTaskEntity;
 import ru.todoapp.model.TaskEntity;
 
 import java.util.Arrays;
@@ -25,11 +24,11 @@ public class TaskRepository {
     /**
      * Saves new task to DataBase
      */
-    public void saveNewTask(SaveTaskEntity saveTaskEntity) {
+    public void saveNewTask(TaskEntity taskEntity) {
         var params = Arrays.asList(
-                saveTaskEntity.description(),
-                saveTaskEntity.datetime(),
-                saveTaskEntity.userUUID());
+                taskEntity.description(),
+                taskEntity.datetime(),
+                taskEntity.userUUID());
         jdbcClient.sql(SAVE_NEW_TASK).params(params).update();
     }
 

@@ -10,7 +10,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import ru.todoapp.model.GetTaskRequestEntity;
 import ru.todoapp.model.TaskEntity;
-import ru.todoapp.model.dto.*;
+import ru.todoapp.model.dto.AddTaskRequestDTO;
+import ru.todoapp.model.dto.FetchTasksRequestDTO;
+import ru.todoapp.model.dto.FetchTasksResponseDTO;
+import ru.todoapp.model.dto.RequestResultDTO;
+import ru.todoapp.model.dto.RequestStatus;
 import ru.todoapp.repository.RequestRepository;
 import ru.todoapp.repository.TaskRepository;
 import ru.todoapp.repository.UserRepository;
@@ -21,7 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TaskServiceTest {
@@ -165,7 +174,7 @@ class TaskServiceTest {
         when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
 
         OffsetDateTime offsetDateTime = OffsetDateTime.parse("2032-12-26T09:40:23+03:00");
-        TaskEntity taskEntity = new TaskEntity(1, "doing smh", offsetDateTime);
+        TaskEntity taskEntity = new TaskEntity(1L, "doing smh", "2", offsetDateTime);
         List<TaskEntity> taskEntities = new ArrayList<>();
         taskEntities.add(taskEntity);
         when(taskRepositoryMock.getTasksList(GetTaskRequestEntity.of(fetchTasksRequestDTO))).thenReturn(taskEntities);

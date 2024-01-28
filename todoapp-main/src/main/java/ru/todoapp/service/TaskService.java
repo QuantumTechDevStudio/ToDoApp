@@ -7,9 +7,13 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.todoapp.model.GetTaskRequestEntity;
 import ru.todoapp.model.RequestEntity;
-import ru.todoapp.model.SaveTaskEntity;
 import ru.todoapp.model.TaskEntity;
-import ru.todoapp.model.dto.*;
+import ru.todoapp.model.dto.AddTaskRequestDTO;
+import ru.todoapp.model.dto.FetchTasksRequestDTO;
+import ru.todoapp.model.dto.FetchTasksResponseDTO;
+import ru.todoapp.model.dto.RequestResultDTO;
+import ru.todoapp.model.dto.RequestStatus;
+import ru.todoapp.model.dto.TaskDTO;
 import ru.todoapp.repository.RequestRepository;
 import ru.todoapp.repository.TaskRepository;
 import ru.todoapp.repository.UserRepository;
@@ -36,7 +40,7 @@ public class TaskService {
      * Task addition handler
      */
     public void handleAddition(AddTaskRequestDTO addTaskRequestDTO) {
-        List<String> unfilled = allUnfilledFields(addTaskRequestDTO);
+        List<String> unfilled = getAllUnfilledFields(addTaskRequestDTO);
         if (!unfilled.isEmpty()) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(),
                     RequestStatus.FAIL,
@@ -51,7 +55,7 @@ public class TaskService {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.FAIL,
                     "Can't create task in past!");
         } else {
-            taskRepository.saveNewTask(SaveTaskEntity.of(addTaskRequestDTO));
+            taskRepository.saveNewTask(TaskEntity.of(addTaskRequestDTO));
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.SUCCESS, null);
         }
 
@@ -62,7 +66,7 @@ public class TaskService {
      * Task fetching handler
      */
     public void handleFetching(FetchTasksRequestDTO fetchTasksRequestDTO) {
-        List<String> unfilled = allUnfilledFields(fetchTasksRequestDTO);
+        List<String> unfilled = getAllUnfilledFields(fetchTasksRequestDTO);
         if (!unfilled.isEmpty()) {
             sendRequestResultDTO(fetchTasksRequestDTO.getRequestUUID(),
                     RequestStatus.FAIL,
@@ -99,7 +103,7 @@ public class TaskService {
      *
      * @param addTaskRequestDTO - the object checked for unfilled fields
      */
-    private List<String> allUnfilledFields(AddTaskRequestDTO addTaskRequestDTO) {
+    private List<String> getAllUnfilledFields(AddTaskRequestDTO addTaskRequestDTO) {
         List<String> unfilled = new ArrayList<>();
         if (StringUtils.isEmpty(addTaskRequestDTO.getUserUUID())) {
             unfilled.add("userUUID");
@@ -118,7 +122,7 @@ public class TaskService {
      *
      * @param fetchTasksRequestDTO - the object checked for unfilled fields
      */
-    private List<String> allUnfilledFields(FetchTasksRequestDTO fetchTasksRequestDTO) {
+    private List<String> getAllUnfilledFields(FetchTasksRequestDTO fetchTasksRequestDTO) {
         List<String> unfilled = new ArrayList<>();
         if (StringUtils.isEmpty(fetchTasksRequestDTO.getUserUUID())) {
             unfilled.add("userUUID");
