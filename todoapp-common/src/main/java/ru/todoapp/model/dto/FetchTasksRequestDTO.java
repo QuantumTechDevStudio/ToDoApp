@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Request that asks for the list of tasks for a specific user from beginDate to endDate
@@ -35,17 +33,16 @@ public class FetchTasksRequestDTO extends RequestDTO {
     /**
      * creates a list of all unfilled fields
      */
-    public List<String> getAllUnfilledFields() {
-        List<String> unfilled = new ArrayList<>();
-        if (StringUtils.isEmpty(getUserUUID())) {
-            unfilled.add("userUUID");
-        }
-        if (beginDate == null) {
-            unfilled.add("beginDate");
-        }
-        if (endDate == null) {
-            unfilled.add("endDate");
-        }
-        return unfilled;
+    public boolean validateFields() {
+        return StringUtils.isEmpty(userUUID) || beginDate == null || endDate == null;
+    }
+
+    @Override
+    public String toString() {
+        return "FetchTasksRequestDTO{" +
+                "userUUID=" + userUUID +
+                ", beginDate=" + beginDate +
+                ", endDate=" + endDate +
+                '}';
     }
 }

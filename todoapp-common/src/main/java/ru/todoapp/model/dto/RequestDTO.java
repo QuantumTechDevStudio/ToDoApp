@@ -14,12 +14,12 @@ public abstract class RequestDTO {
     /**
      * Unique request UUID
      */
-    private String requestUUID;
+    protected String requestUUID;
 
     /**
      * User UUID
      */
-    private String userUUID;
+    protected String userUUID;
 
     /**
      * Request type

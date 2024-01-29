@@ -37,11 +37,10 @@ public class TaskService {
      * Task addition handler
      */
     public void handleAddition(AddTaskRequestDTO addTaskRequestDTO) {
-        List<String> unfilled = addTaskRequestDTO.getAllUnfilledFields();
-        if (!unfilled.isEmpty()) {
+        if (addTaskRequestDTO.validateAllFields()) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(),
                     RequestStatus.FAIL,
-                    "Fields: " + String.join(", ", unfilled) + " are empty!");
+                    addTaskRequestDTO.toString());
         } else if (!userRepository.exists(addTaskRequestDTO.getUserUUID())) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(), RequestStatus.FAIL,
                     "Can't find user!");
@@ -60,11 +59,10 @@ public class TaskService {
      * Task fetching handler
      */
     public void handleFetching(FetchTasksRequestDTO fetchTasksRequestDTO) {
-        List<String> unfilled = fetchTasksRequestDTO.getAllUnfilledFields();
-        if (!unfilled.isEmpty()) {
+        if (fetchTasksRequestDTO.validateFields()) {
             sendRequestResultDTO(fetchTasksRequestDTO.getRequestUUID(),
                     RequestStatus.FAIL,
-                    "Fields: " + String.join(", ", unfilled) + " are empty!");
+                    fetchTasksRequestDTO.toString());
         } else if (!userRepository.exists(fetchTasksRequestDTO.getUserUUID())) {
             sendRequestResultDTO(fetchTasksRequestDTO.getRequestUUID(), RequestStatus.FAIL,
                     "Can't find user!");

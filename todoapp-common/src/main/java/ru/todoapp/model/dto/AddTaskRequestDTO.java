@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Add task request.
@@ -34,17 +32,17 @@ public class AddTaskRequestDTO extends RequestDTO {
     /**
      * creates a list of all unfilled fields
      */
-    public List<String> getAllUnfilledFields() {
-        List<String> unfilled = new ArrayList<>();
-        if (StringUtils.isEmpty(getUserUUID())) {
-            unfilled.add("userUUID");
-        }
-        if (StringUtils.isEmpty(description)) {
-            unfilled.add("description");
-        }
-        if (datetime == null) {
-            unfilled.add("datetime");
-        }
-        return unfilled;
+    public boolean validateAllFields() {
+        return StringUtils.isEmpty(getUserUUID()) || StringUtils.isEmpty(description) || datetime == null;
+    }
+
+    @Override
+    public String toString() {
+        return "AddTaskRequestDTO{" +
+                "description='" + description + '\'' +
+                ", datetime=" + datetime +
+                ", requestUUID='" + requestUUID + '\'' +
+                ", userUUID='" + userUUID + '\'' +
+                '}';
     }
 }

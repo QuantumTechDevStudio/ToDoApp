@@ -1,6 +1,5 @@
 package ru.todoapp.service;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,20 +67,16 @@ class TaskServiceTest {
                 taskRepositoryMock);
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
     /**
      * Test for successful completion of the method
      */
     @Test
     void handleAdditionSuccessTest() {
-        //we need for our user to exist for task addition to be successful
+        // given:
         when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
-
+        // when:
         taskService.handleAddition(addTaskRequestDTO);
-
+        // then:
         verify(requestRepositoryMock, only()).save(any());
         verify(userRepositoryMock, only()).exists(any());
         verify(taskRepositoryMock, only()).saveNewTask(any());
@@ -94,12 +89,12 @@ class TaskServiceTest {
      */
     @Test
     void handleAdditionFailOnUserTest() {
+        // given:
         failedResult = RequestResultDTO.builder().requestUUID("1").status(RequestStatus.FAIL).message("Can't find user!").build();
-        //we test for correct reaction from service in case user doesn't exist in our db
         when(userRepositoryMock.exists(any(String.class))).thenReturn(false);
-
+        // when:
         taskService.handleAddition(addTaskRequestDTO);
-
+        // then:
         verify(requestRepositoryMock, only()).save(any());
         verify(userRepositoryMock, only()).exists(any());
         verify(taskRepositoryMock, never()).saveNewTask(any());
@@ -112,14 +107,14 @@ class TaskServiceTest {
      */
     @Test
     void handleAdditionFailOnEmptyFieldsTest() {
+        // given:
         addTaskRequestDTO = new AddTaskRequestDTO(
                 "1", "2", "", "2032-12-26T09:40:23+03:00");
-
         failedResult = RequestResultDTO.builder().requestUUID("1")
-                .status(RequestStatus.FAIL).message("Fields: description are empty!").build();
-
+                .status(RequestStatus.FAIL).message(addTaskRequestDTO.toString()).build();
+        // when:
         taskService.handleAddition(addTaskRequestDTO);
-
+        // then:
         verify(requestRepositoryMock, only()).save(any());
         verify(userRepositoryMock, never()).exists(any());
         verify(taskRepositoryMock, never()).saveNewTask(any());
@@ -132,14 +127,14 @@ class TaskServiceTest {
      */
     @Test
     void handleAdditionFailOnTimeInPastTest() {
+        // given:
         addTaskRequestDTO = new AddTaskRequestDTO(
                 "1", "2", "Drinking Blazer", "2007-12-26T09:40:23+03:00");
         failedResult = RequestResultDTO.builder().requestUUID("1").status(RequestStatus.FAIL).message("Can't create task in past!").build();
-        //we need our user to exist for check of time not been late to occur
         when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
-
+        // when:
         taskService.handleAddition(addTaskRequestDTO);
-
+        // then:
         verify(requestRepositoryMock, only()).save(any());
         verify(userRepositoryMock, only()).exists(any());
         verify(taskRepositoryMock, never()).saveNewTask(any());
@@ -152,20 +147,18 @@ class TaskServiceTest {
      */
     @Test
     void handleFetchingSuccess() {
+        // given:
         FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(
                 "1", "2", "2032-01-01", "2032-01-01");
-        //we need our user to exist for successful task fetching
         when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
-
         OffsetDateTime offsetDateTime = OffsetDateTime.parse("2032-12-26T09:40:23+03:00");
         TaskEntity taskEntity = new TaskEntity(1L, "doing smh", "2", offsetDateTime);
         List<TaskEntity> taskEntities = new ArrayList<>();
         taskEntities.add(taskEntity);
-        //we need for task repository mock to return something, technically it could have been an empty list
         when(taskRepositoryMock.getTasksList(fetchTasksRequestDTO)).thenReturn(taskEntities);
-
+        // when:
         taskService.handleFetching(fetchTasksRequestDTO);
-
+        // then:
         verify(userRepositoryMock, only()).exists(any());
         verify(taskRepositoryMock, only()).getTasksList(any());
         verify(requestResultDTOKafkaTemplateMock, only()).send(any(), any());
@@ -179,15 +172,14 @@ class TaskServiceTest {
      */
     @Test
     void handleFetchingFailUser() {
+        // given:
         FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(
                 "1", "2", "2032-01-01", "2032-01-01");
-        //we test for correct reaction from service in case user doesn't exist in our db
         when(userRepositoryMock.exists(any(String.class))).thenReturn(false);
-
         failedResult = new RequestResultDTO("1", RequestStatus.FAIL, "Can't find user!");
-
+        // when:
         taskService.handleFetching(fetchTasksRequestDTO);
-
+        // then:
         verify(userRepositoryMock, only()).exists(any());
         verify(taskRepositoryMock, never()).getTasksList(any());
         verify(requestResultDTOKafkaTemplateMock, only()).send(any(), any());
@@ -200,16 +192,15 @@ class TaskServiceTest {
      */
     @Test
     void handleFetchingFailBeginDateAfterEndDate() {
+        // given:
         FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(
                 "1", "2", "2032-01-02", "2032-01-01");
-        //we need our user to exist for that check to occur
         when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
-
         failedResult = new RequestResultDTO("1", RequestStatus.FAIL,
                 "Incorrect search filter: begin date is after end date!");
-
+        // when:
         taskService.handleFetching(fetchTasksRequestDTO);
-
+        // then:
         verify(userRepositoryMock, only()).exists(any());
         verify(taskRepositoryMock, never()).getTasksList(any());
         verify(requestResultDTOKafkaTemplateMock, only()).send(any(), any());
@@ -222,14 +213,14 @@ class TaskServiceTest {
      */
     @Test
     void handleFetchingFailFieldsNotFilled() {
+        // given:
         FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(
                 "1", "", "2032-01-01", "2032-01-01");
-
         failedResult = new RequestResultDTO("1", RequestStatus.FAIL,
-                "Fields: userUUID are empty!");
-
+                fetchTasksRequestDTO.toString());
+        // when:
         taskService.handleFetching(fetchTasksRequestDTO);
-
+        // then:
         verify(userRepositoryMock, never()).exists(any());
         verify(taskRepositoryMock, never()).getTasksList(any());
         verify(requestResultDTOKafkaTemplateMock, only()).send(any(), any());
