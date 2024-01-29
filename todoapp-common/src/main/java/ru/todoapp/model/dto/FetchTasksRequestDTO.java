@@ -31,9 +31,9 @@ public class FetchTasksRequestDTO extends RequestDTO {
     }
 
     /**
-     * creates a list of all unfilled fields
+     * checks for existence of any unfilled fields
      */
-    public boolean validateFields() {
+    public boolean isAnyUnfilledFields() {
         return StringUtils.isEmpty(userUUID) || beginDate == null || endDate == null;
     }
 

@@ -30,9 +30,9 @@ public class AddTaskRequestDTO extends RequestDTO {
     }
 
     /**
-     * creates a list of all unfilled fields
+     * checks for existence of any unfilled fields
      */
-    public boolean validateAllFields() {
+    public boolean isAnyUnfilledFields() {
         return StringUtils.isEmpty(getUserUUID()) || StringUtils.isEmpty(description) || datetime == null;
     }
 

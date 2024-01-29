@@ -37,7 +37,7 @@ public class TaskService {
      * Task addition handler
      */
     public void handleAddition(AddTaskRequestDTO addTaskRequestDTO) {
-        if (addTaskRequestDTO.validateAllFields()) {
+        if (addTaskRequestDTO.isAnyUnfilledFields()) {
             sendRequestResultDTO(addTaskRequestDTO.getRequestUUID(),
                     RequestStatus.FAIL,
                     addTaskRequestDTO.toString());
@@ -59,7 +59,7 @@ public class TaskService {
      * Task fetching handler
      */
     public void handleFetching(FetchTasksRequestDTO fetchTasksRequestDTO) {
-        if (fetchTasksRequestDTO.validateFields()) {
+        if (fetchTasksRequestDTO.isAnyUnfilledFields()) {
             sendRequestResultDTO(fetchTasksRequestDTO.getRequestUUID(),
                     RequestStatus.FAIL,
                     fetchTasksRequestDTO.toString());
