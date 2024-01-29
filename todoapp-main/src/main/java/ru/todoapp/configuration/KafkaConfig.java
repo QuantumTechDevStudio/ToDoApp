@@ -10,9 +10,13 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import ru.todoapp.model.dto.AddTaskRequestDTO;
+import ru.todoapp.model.dto.FetchTasksRequestDTO;
+import ru.todoapp.model.dto.FetchTasksResponseDTO;
 import ru.todoapp.model.dto.PingRequestDTO;
-import ru.todoapp.model.dto.RequestResultDTO;
 import ru.todoapp.model.dto.RegisterRequestDTO;
+import ru.todoapp.model.dto.RequestResultDTO;
+import ru.todoapp.utils.KafkaConstants;
 import ru.todoapp.utils.KafkaTopics;
 import ru.todoapp.utils.KafkaUtils;
 
@@ -51,7 +55,7 @@ public class KafkaConfig {
      */
     @Bean
     public NewTopic pingTopic() {
-        return new NewTopic(KafkaTopics.PING_TOPIC, 1, (short) 1);
+        return new NewTopic(KafkaTopics.PING_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
     }
 
     /**
@@ -61,17 +65,47 @@ public class KafkaConfig {
      */
     @Bean
     public NewTopic requestResultTopic() {
-        return new NewTopic(KafkaTopics.REQUEST_RESULT_TOPIC, 1, (short) 1);
+        return new NewTopic(KafkaTopics.REQUEST_RESULT_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
     }
 
     /**
      * Kafka topic creation for registration
      *
-     * @see RegisterRequestDTO
+     * @see ru.todoapp.model.dto.RegisterRequestDTO
      */
     @Bean
     public NewTopic userRegistrationTopic() {
-        return new NewTopic(KafkaTopics.REGISTRATION_TOPIC, 1, (short) 1);
+        return new NewTopic(KafkaTopics.REGISTRATION_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
+    }
+
+    /**
+     * Kafka topic creation for adding tasks
+     *
+     * @see ru.todoapp.model.dto.AddTaskRequestDTO
+     */
+    @Bean
+    public NewTopic addTaskTopic() {
+        return new NewTopic(KafkaTopics.ADD_TASK_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
+    }
+
+    /**
+     * Kafka topic creation for fetching tasks request
+     *
+     * @see ru.todoapp.model.dto.FetchTasksRequestDTO
+     */
+    @Bean
+    public NewTopic fetchTasksRequestTopic() {
+        return new NewTopic(KafkaTopics.FETCH_REQUEST_TASKS_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
+    }
+
+    /**
+     * Kafka topic creation for fetching tasks response
+     *
+     * @see ru.todoapp.model.dto.FetchTasksResponseDTO
+     */
+    @Bean
+    public NewTopic fetchTasksResponseTopic() {
+        return new NewTopic(KafkaTopics.FETCH_RESPONSE_TASKS_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
     }
 
     /**
@@ -126,5 +160,59 @@ public class KafkaConfig {
 
         factory.setConsumerFactory(userRegistrationConsumerFactory());
         return factory;
+    }
+
+    /**
+     * Consumer factory bean for receiving AddTaskRequestDTO
+     */
+    @Bean
+    public ConsumerFactory<String, AddTaskRequestDTO> addTaskConsumerFactory() {
+        return KafkaUtils.getKafkaConsumerFactory(AddTaskRequestDTO.class, GROUP_ID, kafkaUrl);
+    }
+
+    /**
+     * Listener factory bean for receiving AddTaskRequestDTO
+     */
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, AddTaskRequestDTO> addTaskRequestContainerFactory() {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, AddTaskRequestDTO>();
+
+        factory.setConsumerFactory(addTaskConsumerFactory());
+        return factory;
+    }
+
+    /**
+     * Consumer factory bean for receiving FetchTasksRequestDTO
+     */
+    @Bean
+    public ConsumerFactory<String, FetchTasksRequestDTO> fetchTaskConsumerFactory() {
+        return KafkaUtils.getKafkaConsumerFactory(FetchTasksRequestDTO.class, GROUP_ID, kafkaUrl);
+    }
+
+    /**
+     * Listener factory bean for receiving FetchTaskRequestDTO
+     */
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, FetchTasksRequestDTO> fetchTaskRequestContainerFactory() {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, FetchTasksRequestDTO>();
+
+        factory.setConsumerFactory(fetchTaskConsumerFactory());
+        return factory;
+    }
+
+    /**
+     * Producer factory bean for sending FetchTaskResponseDTO
+     */
+    @Bean
+    public ProducerFactory<String, FetchTasksResponseDTO> fetchTaskResponseDTOProducerFactory() {
+        return KafkaUtils.getKafkaProducerFactory(kafkaUrl);
+    }
+
+    /**
+     * KafkaTemplate bean for sending FetchTaskResponseDTO
+     */
+    @Bean
+    public KafkaTemplate<String, FetchTasksResponseDTO> fetchTaskResponseDTOKafkaTemplate() {
+        return new KafkaTemplate<>(fetchTaskResponseDTOProducerFactory());
     }
 }

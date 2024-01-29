@@ -31,8 +31,6 @@ public class UserService {
      * New user registration request handler
      */
     public void handle(RegisterRequestDTO registerRequestDTO) {
-        requestRepository.save(RequestEntity.of(registerRequestDTO));
-
         List<String> unfilled = getAllUnfilledFields(registerRequestDTO);
         if (!unfilled.isEmpty()) {
             sendRequestResultDTO(registerRequestDTO.getRequestUUID(), RequestStatus.FAIL,
@@ -44,6 +42,8 @@ public class UserService {
             userRepository.saveUser(UserEntity.of(registerRequestDTO));
             sendRequestResultDTO(registerRequestDTO.getRequestUUID(), RequestStatus.SUCCESS, null);
         }
+
+        requestRepository.save(RequestEntity.of(registerRequestDTO));
     }
 
     /**

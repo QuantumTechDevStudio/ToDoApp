@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.flywaydb:flyway-maven-plugin:10.3.0'
     implementation project(":todoapp-common")

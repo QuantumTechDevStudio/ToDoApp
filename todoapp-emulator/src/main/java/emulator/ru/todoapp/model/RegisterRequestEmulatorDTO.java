@@ -1,7 +1,7 @@
 package emulator.ru.todoapp.model;
 
 /**
- * Запрос Register.
+ * Register request.
  *
  * @param userUUID  users UUID
  * @param name      users name
