@@ -13,6 +13,9 @@ import ru.todoapp.utils.KafkaTopics;
 @Slf4j
 @Service
 public class FetchTaskResponseListener {
+    /**
+     * Kafka massage handler for FetchTasksResponseDTO
+     */
     @KafkaListener(topics = KafkaTopics.FETCH_RESPONSE_TASKS_TOPIC,
             groupId = KafkaConfig.GROUP_ID,
             containerFactory = "fetchTasksContainerFactory")

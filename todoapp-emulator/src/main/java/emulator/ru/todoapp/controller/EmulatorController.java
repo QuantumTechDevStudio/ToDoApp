@@ -79,6 +79,12 @@ public class EmulatorController {
         addTaskRequestKafkaTemplate.send(KafkaTopics.ADD_TASK_TOPIC, addTaskRequestDTO);
     }
 
+    /**
+     * Fetching tasks request processing.
+     * Sends request for fetching tasks then FetchTaskResponseListener receives response containing tasks in set date period.
+     *
+     * @param fetchTasksRequestEmulatorDTO - parameter that emulates actions of user to fetch tasks
+     */
     @PostMapping("/fetch_tasks_list")
     public void fetchTasks(@RequestBody FetchTasksRequestEmulatorDTO fetchTasksRequestEmulatorDTO) {
         FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(UUID.randomUUID().toString(),
