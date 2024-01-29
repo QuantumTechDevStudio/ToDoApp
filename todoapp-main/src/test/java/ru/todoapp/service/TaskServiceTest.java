@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
-import ru.todoapp.model.GetTaskRequestEntity;
 import ru.todoapp.model.TaskEntity;
 import ru.todoapp.model.dto.AddTaskRequestDTO;
 import ru.todoapp.model.dto.FetchTasksRequestDTO;
@@ -78,6 +77,7 @@ class TaskServiceTest {
      */
     @Test
     void handleAdditionSuccessTest() {
+        //we need for our user to exist for task addition to be successful
         when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
 
         taskService.handleAddition(addTaskRequestDTO);
@@ -95,6 +95,7 @@ class TaskServiceTest {
     @Test
     void handleAdditionFailOnUserTest() {
         failedResult = RequestResultDTO.builder().requestUUID("1").status(RequestStatus.FAIL).message("Can't find user!").build();
+        //we test for correct reaction from service in case user doesn't exist in our db
         when(userRepositoryMock.exists(any(String.class))).thenReturn(false);
 
         taskService.handleAddition(addTaskRequestDTO);
@@ -134,25 +135,7 @@ class TaskServiceTest {
         addTaskRequestDTO = new AddTaskRequestDTO(
                 "1", "2", "Drinking Blazer", "2007-12-26T09:40:23+03:00");
         failedResult = RequestResultDTO.builder().requestUUID("1").status(RequestStatus.FAIL).message("Can't create task in past!").build();
-        when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
-
-        taskService.handleAddition(addTaskRequestDTO);
-
-        verify(requestRepositoryMock, only()).save(any());
-        verify(userRepositoryMock, only()).exists(any());
-        verify(taskRepositoryMock, never()).saveNewTask(any());
-        verify(requestResultDTOKafkaTemplateMock, only()).send(any(), any());
-        verify(requestResultDTOKafkaTemplateMock, only()).send(KafkaTopics.REQUEST_RESULT_TOPIC, failedResult);
-    }
-
-    /**
-     * Test for failed attempt of adding tasks. Reason: time in the incorrect format.
-     */
-    @Test
-    void handleAdditionFailOnTimeFormatTest() {
-        addTaskRequestDTO = new AddTaskRequestDTO(
-                "1", "2", "Earning 300$", "abracadabra");
-        failedResult = RequestResultDTO.builder().requestUUID("1").status(RequestStatus.FAIL).message("Can't create task with incorrect datetime!").build();
+        //we need our user to exist for check of time not been late to occur
         when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
 
         taskService.handleAddition(addTaskRequestDTO);
@@ -170,14 +153,16 @@ class TaskServiceTest {
     @Test
     void handleFetchingSuccess() {
         FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(
-                "1", "2", "2032-01-01+03:00", "2032-01-01+03:00");
+                "1", "2", "2032-01-01", "2032-01-01");
+        //we need our user to exist for successful task fetching
         when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
 
         OffsetDateTime offsetDateTime = OffsetDateTime.parse("2032-12-26T09:40:23+03:00");
         TaskEntity taskEntity = new TaskEntity(1L, "doing smh", "2", offsetDateTime);
         List<TaskEntity> taskEntities = new ArrayList<>();
         taskEntities.add(taskEntity);
-        when(taskRepositoryMock.getTasksList(GetTaskRequestEntity.of(fetchTasksRequestDTO))).thenReturn(taskEntities);
+        //we need for task repository mock to return something, technically it could have been an empty list
+        when(taskRepositoryMock.getTasksList(fetchTasksRequestDTO)).thenReturn(taskEntities);
 
         taskService.handleFetching(fetchTasksRequestDTO);
 
@@ -195,7 +180,8 @@ class TaskServiceTest {
     @Test
     void handleFetchingFailUser() {
         FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(
-                "1", "2", "2032-01-01+03:00", "2032-01-01+03:00");
+                "1", "2", "2032-01-01", "2032-01-01");
+        //we test for correct reaction from service in case user doesn't exist in our db
         when(userRepositoryMock.exists(any(String.class))).thenReturn(false);
 
         failedResult = new RequestResultDTO("1", RequestStatus.FAIL, "Can't find user!");
@@ -215,32 +201,12 @@ class TaskServiceTest {
     @Test
     void handleFetchingFailBeginDateAfterEndDate() {
         FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(
-                "1", "2", "2032-01-02+03:00", "2032-01-01+03:00");
+                "1", "2", "2032-01-02", "2032-01-01");
+        //we need our user to exist for that check to occur
         when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
 
         failedResult = new RequestResultDTO("1", RequestStatus.FAIL,
                 "Incorrect search filter: begin date is after end date!");
-
-        taskService.handleFetching(fetchTasksRequestDTO);
-
-        verify(userRepositoryMock, only()).exists(any());
-        verify(taskRepositoryMock, never()).getTasksList(any());
-        verify(requestResultDTOKafkaTemplateMock, only()).send(any(), any());
-        verify(requestResultDTOKafkaTemplateMock, only()).send(KafkaTopics.REQUEST_RESULT_TOPIC, failedResult);
-        verify(fetchTasksResponseDTOKafkaTemplateMock, never()).send(any(), any());
-    }
-
-    /**
-     * Test for fetching of tasks fails. Reason: dates have incorrect format
-     */
-    @Test
-    void handleFetchingFailDateFormat() {
-        FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(
-                "1", "2", "aboba", "buba");
-        when(userRepositoryMock.exists(any(String.class))).thenReturn(true);
-
-        failedResult = new RequestResultDTO("1", RequestStatus.FAIL,
-                "Incorrect search filter: dates have incorrect format!");
 
         taskService.handleFetching(fetchTasksRequestDTO);
 
@@ -257,10 +223,10 @@ class TaskServiceTest {
     @Test
     void handleFetchingFailFieldsNotFilled() {
         FetchTasksRequestDTO fetchTasksRequestDTO = new FetchTasksRequestDTO(
-                "1", "2", "", "buba");
+                "1", "", "2032-01-01", "2032-01-01");
 
         failedResult = new RequestResultDTO("1", RequestStatus.FAIL,
-                "Fields: beginDate are empty!");
+                "Fields: userUUID are empty!");
 
         taskService.handleFetching(fetchTasksRequestDTO);
 

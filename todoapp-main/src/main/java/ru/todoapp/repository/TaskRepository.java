@@ -1,11 +1,15 @@
 package ru.todoapp.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
-import ru.todoapp.model.GetTaskRequestEntity;
 import ru.todoapp.model.TaskEntity;
+import ru.todoapp.model.dto.FetchTasksRequestDTO;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,10 +36,29 @@ public class TaskRepository {
         jdbcClient.sql(SAVE_NEW_TASK).params(params).update();
     }
 
-    public List<TaskEntity> getTasksList(GetTaskRequestEntity getTaskRequestEntity) {
-        var params = Arrays.asList(getTaskRequestEntity.userUUID(),
-                getTaskRequestEntity.beginDate(),
-                getTaskRequestEntity.endDate());
-        return jdbcClient.sql(GET_TASKS_FROM_TO).params(params).query(TaskEntity.class).list();
+    /**
+     * Fetches list of tasks that satisfies entry parameters
+     *
+     * @param fetchTaskRequestDTO - object containing parameters for fetching
+     */
+    public List<TaskEntity> getTasksList(FetchTasksRequestDTO fetchTaskRequestDTO) {
+        var params = Arrays.asList(fetchTaskRequestDTO.getUserUUID(),
+                fetchTaskRequestDTO.getBeginDate().atOffset(ZoneOffset.UTC),
+                fetchTaskRequestDTO.getEndDate().atOffset(ZoneOffset.UTC));
+        return jdbcClient.sql(GET_TASKS_FROM_TO).params(params).query(new TasksRowMapper()).list();
+    }
+
+    /**
+     * Mapper for Task entities
+     */
+    private static class TasksRowMapper implements RowMapper<TaskEntity> {
+
+        @Override
+        public TaskEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new TaskEntity(rs.getLong("id"),
+                    rs.getString("description"),
+                    null,
+                    rs.getTimestamp("datetime").toInstant().atOffset(ZoneOffset.UTC));
+        }
     }
 }

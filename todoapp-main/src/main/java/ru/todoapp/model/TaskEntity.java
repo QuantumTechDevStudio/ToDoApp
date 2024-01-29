@@ -3,7 +3,6 @@ package ru.todoapp.model;
 import ru.todoapp.model.dto.AddTaskRequestDTO;
 import ru.todoapp.model.dto.TaskDTO;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -20,10 +19,13 @@ public record TaskEntity(Long id, String description, String userUUID, OffsetDat
         return new TaskEntity(null,
                 addTaskRequestDTO.getDescription(),
                 addTaskRequestDTO.getUserUUID(),
-                Instant.parse(addTaskRequestDTO.getDatetime()).atOffset(ZoneOffset.UTC));
+                addTaskRequestDTO.getDatetime().atOffset(ZoneOffset.UTC));
     }
 
+    /**
+     * Converts TaskEntity object to TaskDTO
+     */
     public TaskDTO toTaskDTO() {
-        return new TaskDTO(id, description, datetime.toString());
+        return new TaskDTO(id, description, datetime.toInstant());
     }
 }

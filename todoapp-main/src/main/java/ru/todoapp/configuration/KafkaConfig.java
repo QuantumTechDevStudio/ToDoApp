@@ -16,6 +16,7 @@ import ru.todoapp.model.dto.FetchTasksResponseDTO;
 import ru.todoapp.model.dto.PingRequestDTO;
 import ru.todoapp.model.dto.RegisterRequestDTO;
 import ru.todoapp.model.dto.RequestResultDTO;
+import ru.todoapp.utils.KafkaConstants;
 import ru.todoapp.utils.KafkaTopics;
 import ru.todoapp.utils.KafkaUtils;
 
@@ -54,7 +55,7 @@ public class KafkaConfig {
      */
     @Bean
     public NewTopic pingTopic() {
-        return new NewTopic(KafkaTopics.PING_TOPIC, 1, (short) 1);
+        return new NewTopic(KafkaTopics.PING_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
     }
 
     /**
@@ -64,7 +65,7 @@ public class KafkaConfig {
      */
     @Bean
     public NewTopic requestResultTopic() {
-        return new NewTopic(KafkaTopics.REQUEST_RESULT_TOPIC, 1, (short) 1);
+        return new NewTopic(KafkaTopics.REQUEST_RESULT_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
     }
 
     /**
@@ -74,7 +75,7 @@ public class KafkaConfig {
      */
     @Bean
     public NewTopic userRegistrationTopic() {
-        return new NewTopic(KafkaTopics.REGISTRATION_TOPIC, 1, (short) 1);
+        return new NewTopic(KafkaTopics.REGISTRATION_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
     }
 
     /**
@@ -84,7 +85,7 @@ public class KafkaConfig {
      */
     @Bean
     public NewTopic addTaskTopic() {
-        return new NewTopic(KafkaTopics.ADD_TASK_TOPIC, 1, (short) 1);
+        return new NewTopic(KafkaTopics.ADD_TASK_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
     }
 
     /**
@@ -94,7 +95,7 @@ public class KafkaConfig {
      */
     @Bean
     public NewTopic fetchTasksRequestTopic() {
-        return new NewTopic(KafkaTopics.FETCH_REQUEST_TASKS_TOPIC, 1, (short) 1);
+        return new NewTopic(KafkaTopics.FETCH_REQUEST_TASKS_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
     }
 
     /**
@@ -104,7 +105,7 @@ public class KafkaConfig {
      */
     @Bean
     public NewTopic fetchTasksResponseTopic() {
-        return new NewTopic(KafkaTopics.FETCH_RESPONSE_TASKS_TOPIC, 1, (short) 1);
+        return new NewTopic(KafkaTopics.FETCH_RESPONSE_TASKS_TOPIC, KafkaConstants.DEFAULT_NUMBER_OF_PARTITIONS, KafkaConstants.DEFAULT_REPLICATION_FACTOR);
     }
 
     /**
